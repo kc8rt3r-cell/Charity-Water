@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Interactive Landing Page</title>
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1a33;
+      --text:#e9eefc;
+      --muted:#b9c4e6;
+      --btn:#2b5cff;
+      --btn2:#1f2a44;
+      --ring: rgba(43,92,255,.35);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 20%, #172a54 0%, var(--bg) 60%);
+      color: var(--text);
+    }
+
+    .landing{
+      min-height: 100vh;
+      display:flex;
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .image-panel, .cta-panel{
+      flex: 1;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    }
+
+    .image-panel{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      position: relative;
+    }
+
+    .image-wrap{
+      width: 100%;
+      height: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .image-panel img{
+      width: 100%;
+      height: 100%;
+      max-height: calc(100vh - 48px);
+      object-fit: cover;
+      border-radius: calc(var(--radius) - 6px);
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .badge{
+      position:absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      backdrop-filter: blur(8px);
+    }
+
+    .cta-panel{
+      padding: 44px;
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+    }
+
+    h1{
+      margin: 0;
+      font-size: clamp(28px, 3vw, 44px);
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+
+    p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+      max-width: 56ch;
+    }
+
+    .cta-grid{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .cta-card{
+      text-align:left;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(15,26,51,.5);
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .cta-card:hover{
+      transform: translateY(-1px);
+      border-color: rgba(43,92,255,.35);
+      background: rgba(15,26,51,.75);
+    }
+
+    .cta-card:focus{
+      outline: none;
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    .cta-left{
+      display:flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cta-title{
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    .cta-desc{
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .cta-pill{
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(43,92,255,.14);
+      border: 1px solid rgba(43,92,255,.25);
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .primary-actions{
+      display:flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn{
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .btn-primary{
+      background: var(--btn);
+      color: white;
+    }
+    .btn-primary:hover{ transform: translateY(-1px); }
+
+    .btn-secondary{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--text);
+    }
+
+    .fineprint{
+      margin-top: 12px;
+      font-size: 12px;
+      color: rgba(185,196,230,.85);
+    }
+
+    /* Responsive: stack on smaller screens */
+    @media (max-width: 900px){
+      .landing{
+        flex-direction: column;
+      }
+      .image-panel img{
+        max-height: 42vh;
+      }
+      .cta-panel{
+        padding: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="landing">
+    <!-- LEFT: IMAGE -->
+    <section class="image-panel" aria-label="Visual preview">
+      <div class="badge" id="badgeText">Preview: Default</div>
+
+      <div class="image-wrap">
+        <!-- Put your default image here -->
+        <img
+          id="heroImage"
+          src="img/default.jpg"
+          alt="Landing page preview"
+        />
+      </div>
+    </section>
+
+    <!-- RIGHT: CTA -->
+    <section class="cta-panel" aria-label="Call to action">
+      <h1 id="headline">Choose your path.</h1>
+      <p id="subtext">Tap an option to instantly update the preview image on the left.</p>
+
+      <div class="cta-grid" role="list">
+        <button
+          class="cta-card"
+          role="listitem"
+          data-img="img/option1.jpg"
+          data-badge="Preview: Option 1"
+          data-title="Option One"
+          data-text="Short description for option one. Explain the value in one sentence."
+          onclick="swapFromData(this)">
+          <div class="cta-left">
+            <div class="cta-title">Option One</div>
+            <div class="cta-desc">Show the first concept / offer / feature set.</div>
+          </div>
+          <span class="cta-pill">Explore</span>
+        </button>
+
+        <button
+          class="cta-card"
+          role="listitem"
+          data-img="img/option2.jpg"
+          data-badge="Preview: Option 2"
+          data-title="Option Two"
+          data-text="Short description for option two. Keep it punchy and clear."
+          onclick="swapFromData(this)">
+          <div class="cta-left">
+            <div class="cta-title">Option Two</div>
+            <div class="cta-desc">Swap in a different image + messaging.</div>
+          </div>
+          <span class="cta-pill">Compare</span>
+        </button>
+
+        <button
+          class="cta-card"
+          role="listitem"
+          data-img="img/option3.jpg"
+          data-badge="Preview: Option 3"
+          data-title="Option Three"
+          data-text="Short description for option three. Another angle or audience."
+          onclick="swapFromData(this)">
+          <div class="cta-left">
+            <div class="cta-title">Option Three</div>
+            <div class="cta-desc">Perfect for pricing tiers, personas, or features.</div>
+          </div>
+          <span class="cta-pill">Select</span>
+        </button>
+      </div>
+
+      <div class="primary-actions">
+        <button class="btn btn-primary" onclick="alert('Primary CTA clicked! Hook this up to your form / checkout / signup.')">
+          Primary Action
+        </button>
+        <button class="btn btn-secondary" onclick="alert('Secondary CTA clicked! Link to details / FAQ / docs.')">
+          Secondary Action
+        </button>
+      </div>
+
+      <div class="fineprint">
+        Tip: Put your images in <strong>/img</strong> (default.jpg, option1.jpg, option2.jpg, option3.jpg) and this file will work immediately.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function swapContent(imageSrc, headlineText, subText, badgeText) {
+      const img = document.getElementById("heroImage");
+      const headline = document.getElementById("headline");
+      const subtext = document.getElementById("subtext");
+      const badge = document.getElementById("badgeText");
+
+      // Fade out
+      img.style.opacity = 0;
+      img.style.transform = "scale(0.99)";
+
+      setTimeout(() => {
+        img.src = imageSrc;
+        headline.textContent = headlineText;
+        subtext.textContent = subText;
+        badge.textContent = badgeText || "Preview";
+
+        // Fade in
+        img.style.opacity = 1;
+        img.style.transform = "scale(1)";
+      }, 160);
+    }
+
+    function swapFromData(el) {
+      swapContent(
+        el.dataset.img,
+        el.dataset.title,
+        el.dataset.text,
+        el.dataset.badge
+      );
+    }
+  </script>
+</body>
+</html>
